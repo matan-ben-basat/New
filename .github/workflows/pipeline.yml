@@ -5,6 +5,7 @@ on:
     branches: [ "main" ]
 
 jobs:
+  # --- חלק ה-CI (Continuous Integration) ---
   ci-tests:
     runs-on: ubuntu-latest
     steps:
@@ -22,6 +23,7 @@ jobs:
       - name: Run Tests (CI)
         run: pytest test_app.py
 
+  # --- חלק ה-CD (Continuous Delivery) ---
   cd-build:
     needs: ci-tests
     runs-on: ubuntu-latest
