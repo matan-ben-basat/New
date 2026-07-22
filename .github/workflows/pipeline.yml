@@ -1,0 +1,35 @@
+name: Python CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  # --- חלק ה-CI (Continuous Integration) ---
+  ci-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/python-script@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install pytest
+        run: pip install pytest
+
+      - name: Run Tests (CI)
+        run: pytest test_app.py
+
+  # --- חלק ה-CD (Continuous Delivery) ---
+  cd-build:
+    needs: ci-tests # ירוץ רק אם הטסטים ב-CI עברו בהצלחה!
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker Image (CD)
+        run: docker build -t my-python-app:latest .
